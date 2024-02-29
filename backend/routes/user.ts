@@ -2,6 +2,7 @@ import zod from "zod";
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -35,9 +36,13 @@ router.post("/signup", async (req, res) => {
       });
     }
 
+    // generate hashedPassword
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
     // create new user in database
     await prisma.user.create({
-      data: { username: req.body.username, password: req.body.password },
+      data: { username: req.body.username, password: hashedPassword },
     });
 
     return res.json({
@@ -63,11 +68,23 @@ router.post("/login", async (req, res) => {
     const user = await prisma.user.findUnique({
       where: {
         username: req.body.username,
-        password: req.body.password,
       },
     });
 
     if (user === null) {
+      return res.json({
+        msg: "Incorrect Credentials",
+      });
+    }
+
+    // validating password
+
+    const passwordMatch = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    if (!passwordMatch) {
       return res.json({
         msg: "Incorrect Credentials",
       });
