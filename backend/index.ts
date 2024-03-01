@@ -1,5 +1,4 @@
-import express from "express";
-import { Request, Response } from "express";
+import express, { Request, Response } from "express";
 import mainRouter from "./routes";
 
 const PORT = 3000;
@@ -9,9 +8,9 @@ app.use(express.json());
 
 app.use("/api/v1", mainRouter);
 
-app.get("/test", (req: Request, res: Response) => {
+app.get("/", (req: Request, res: Response) => {
   res.json({
-    msg: "working",
+    msg: "notes app",
   });
 });
 

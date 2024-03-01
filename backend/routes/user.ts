@@ -1,6 +1,6 @@
-import zod from "zod";
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
+import zod from "zod";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
@@ -37,7 +37,6 @@ router.post("/signup", async (req, res) => {
     }
 
     // generate hashedPassword
-
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     // create new user in database
@@ -78,7 +77,6 @@ router.post("/login", async (req, res) => {
     }
 
     // validating password
-
     const passwordMatch = await bcrypt.compare(
       req.body.password,
       user.password
