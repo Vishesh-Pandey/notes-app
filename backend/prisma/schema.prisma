@@ -25,6 +25,6 @@ model Note {
   id Int @id @default(autoincrement())
   title String
   description String
-  user_id Int
-  user User @relation(fields: [user_id] , references: [id])
+  username String
+  user User @relation(fields: [username] , references: [username])
 }
