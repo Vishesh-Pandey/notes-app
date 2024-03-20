@@ -43,10 +43,11 @@ router.post("/signup", async (req, res) => {
     await prisma.user.create({
       data: { username: req.body.username, password: hashedPassword },
     });
-
-    return res.json({
-      msg: "Signup Successful",
-    });
+    const token = jwt.sign(
+      { username: req.body.username },
+      process.env.JWT_SECRET || "invalid_secret"
+    );
+    return res.json(token);
   } catch (error) {
     res.json({
       msg: "Internal Server Error",
