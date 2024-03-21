@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
@@ -7,7 +6,15 @@ import CardActions from "@mui/joy/CardActions";
 import Chip from "@mui/joy/Chip";
 import Typography from "@mui/joy/Typography";
 
-export default function Note() {
+interface PropType {
+  notes: {
+    title: string;
+    description: string;
+  };
+}
+
+export default function Note(props: PropType) {
+  const note = props.notes;
   return (
     <Card
       variant="solid"
@@ -17,9 +24,6 @@ export default function Note() {
         boxShadow: "lg",
         width: 400,
         maxWidth: "100%",
-        // to make the demo resizeable
-        overflow: "auto",
-        resize: "horizontal",
       }}
     >
       <Box sx={{ display: "flex", gap: 1 }}>
@@ -31,18 +35,10 @@ export default function Note() {
         </Chip>
       </Box>
       <div>
-        <Typography level="h2">
-          Title of Note
-          <Typography fontSize="sm" textColor="text.tertiary">
-            on date
-          </Typography>
-        </Typography>
+        <Typography level="h2">{note.title}</Typography>
       </div>
       <CardContent>
-        <Typography level="body-md">
-          This license allows you to use the Symbol System Design with unlimited
-          amount of personal and commercial projects.
-        </Typography>
+        <Typography level="body-md">{note.description}</Typography>
       </CardContent>
       <CardActions>
         <Button variant="solid">Share</Button>

@@ -9,13 +9,12 @@ import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/joy";
 
 function ModeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
 
-  // necessary for server-side rendering
-  // because mode is undefined on the server
   React.useEffect(() => {
     setMounted(true);
   }, []);
@@ -42,21 +41,34 @@ export default function Signup() {
   const navigate = useNavigate();
 
   const handleSignup = async () => {
-    const response = await axios({
-      method: "post",
-      url: "http://localhost:3000/api/v1/user/signup",
-      data: {
-        username,
-        password,
-      },
-    });
-    window.localStorage.setItem("token", response.data);
-    navigate("/dashboard");
+    try {
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:3000/api/v1/user/signup",
+        data: {
+          username,
+          password,
+        },
+      });
+      if (response.data.msg == "username not available") {
+        alert("Email already in use");
+        return;
+      }
+      window.localStorage.setItem("token", response.data);
+      navigate("/dashboard");
+    } catch (error) {
+      alert("something went wrong");
+    }
   };
 
   return (
     <main>
-      <ModeToggle />
+      <Box sx={{ textAlign: "center" }}>
+        <Typography p={2} level="h1">
+          Notes App - Signup
+        </Typography>
+        <ModeToggle />
+      </Box>
       <Sheet
         sx={{
           width: 300,
